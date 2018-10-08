@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    integrity="sha256-OweaP/Ic6rsV+lysfyS4h+LM6sRwuO3euTYfr6M124g=" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+    crossorigin="anonymous">
+  <title>ToDo List DB</title>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <div class="card" id="db-main">
+          <div class="card-content">
+            <span class="card-title">Task List</span>
+            <div class="row">
+              <form id="db-task-from">
+                <div class="input-field col s12">
+                  <input type="text" name="db-task" id="db-task">
+                  <label for="db-task">New Task</label>
+                </div>
+                <input type="submit" value="Add Task" class="btn">
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="card-action">
+          <h5 id="db-task-title">Tasks</h5>
+          <div class="input-field col s12">
+            <input type="text" name="db-filter" id="db-filter">
+            <label for="db-filter">Filter Tasks</label>
+            <ul class="collection"></ul>
+            <a href="#" class="db-clear-tasks btn black">Clear Tasks</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" integrity="sha256-U/cHDMTIHCeMcvehBv1xQ052bPSbJtbuiw4QA9cTKz0="
+    crossorigin="anonymous"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
