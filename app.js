@@ -19,6 +19,10 @@ loadEventListeners();
 // Define loadEventlisteners func
 
 function loadEventListeners() {
+  // DOM load event
+
+  document.addEventListener('DOMContentLoaded', fetchTasks);
+
   // Add task events
 
   form.addEventListener('submit', addTask);
@@ -26,6 +30,14 @@ function loadEventListeners() {
   // Remove task events
 
   taskList.addEventListener('click', removeTask);
+
+  // Clear task event
+
+  clearBtn.addEventListener('click', clearAllTasks);
+
+  // Filter task event
+
+  filter.addEventListener('keyup', filterTasks);
 }
 
 // Define addTask func
@@ -96,6 +108,10 @@ function addTask(e) {
 
   taskList.appendChild(li);
 
+  // Store tasks in local storage
+
+  storeTaskInLocalStorage(taskInput.value);
+
   // Clear inputTask
 
   taskInput.value = '';
@@ -115,8 +131,158 @@ function addTask(e) {
    */
 }
 
-function removeTask(e) {
-  if (e.target.classList.contains('db-delete-item')) {
-    console.log(e.target);
+function storeTaskInLocalStorage(taskText) {
+  // Initiate Array tasks
+
+  let tasks = [];
+
+  if (localStorage.getItem('tasks') !== null) {
+    tasks = JSON.parse(localStorage.getItem('tasks'));
   }
+  tasks.push(taskText);
+
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+// Declare fetchTasks func
+
+function fetchTasks() {
+  // Get tasks from LocalStorage
+  let tasks = [];
+
+  if (localStorage.getItem('tasks') !== null) {
+    tasks = JSON.parse(localStorage.getItem('tasks'));
+  }
+
+  tasks.forEach((task) => {
+    // Create lis and append them to ul
+    // Create li element
+
+    const li = document.createElement('li');
+
+    // Add a class
+
+    li.className = 'collection-item';
+
+    //  Create text node and append to li
+
+    li.appendChild(document.createTextNode(task));
+
+    const iconRemove = document.createElement('i');
+
+    // Add a class to iconRemove
+
+    iconRemove.className =
+      'material-icons red-text db-delete-item secondary-content';
+
+    // Add textNode to iconRemove
+
+    iconRemove.appendChild(document.createTextNode('remove_circle_outline'));
+
+    // Append iconRemove to ul as a child
+
+    li.appendChild(iconRemove);
+
+    // Append li to ul as a child
+
+    taskList.appendChild(li);
+  });
+}
+
+function removeTask(e) {
+  // Check if clicl is on iconRemove. if Yes - remove task
+
+  if (e.target.classList.contains('db-delete-item')) {
+    // Confirm removing and remove task
+
+    if (confirm('Are You Sure?')) {
+      e.target.parentElement.remove();
+      // Remove from LocalStorage
+
+      removeTaskFromLocalStorage(e.target.parentElement.firstChild.textContent);
+    }
+
+    // console.log(e.target);
+  }
+}
+
+// Declare removeTaskFromLocalStorage func
+
+function removeTaskFromLocalStorage(taskText) {
+  // Get tasks from LS
+
+  let tasks = [];
+
+  if (localStorage.getItem('tasks') !== null) {
+    tasks = JSON.parse(localStorage.getItem('tasks'));
+  }
+
+  // If taskText == element of tasks array then splice it from the array
+  tasks.forEach((el, index) => {
+    if (el === taskText) {
+      tasks.splice(index, 1); // eslint-disable-line no-magic-numbers
+    }
+  });
+
+  // Save tasks array to LS
+
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+
+  console.log(taskText, tasks); // eslint-disable-line
+}
+
+// Define clearAllTasks for clearBtn
+
+function clearAllTasks() {
+  if (confirm('Are You Sure?')) {
+    // first way
+
+    // taskList.innerHTML = '';
+
+    // Faster way under the article delivired by Brad
+    // https://jsperf.com/innerhtml-vs-removechild
+    // but link is broken
+
+    while (taskList.firstChild) {
+      taskList.removeChild(taskList.firstChild);
+    }
+    // Remove tasks element from LocalStorage
+
+    localStorage.removeItem('tasks');
+  }
+  // console.log(e.target); // eslint-disable-line
+}
+
+function filterTasks(e) {
+  const textFilter = e.target.value.toLowerCase();
+
+  // Get all li items
+
+  document.querySelectorAll('.collection-item').forEach((task) => {
+    const item = task.firstChild.textContent;
+
+    // Es-lint rule no-magic numbers
+    /* eslint-disable-next-line no-unused-vars */
+    const noIndexOf = -1;
+
+    /* eslint-disable */
+    // console.info(item.toLowerCase().indexOf(textFilter));
+    /* eslint-enable */
+
+    // Eslint said negative conditions is difficult to read it's better use positive conditions
+
+    if (item.toLowerCase().indexOf(textFilter) === noIndexOf) {
+      task.style.display = 'none';
+    } else {
+      task.style.display = 'block';
+    }
+
+    /* eslint-disable-next-line no-console */
+    // console.info(item);
+  });
+
+  // devs only
+  // Test of disable eslint rule
+  /* eslint-disable-next-line */
+  // console.info(textFilter);
 }
